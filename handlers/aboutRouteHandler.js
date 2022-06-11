@@ -13,7 +13,7 @@ handler.aboutRouteHandler = (requestProperty, callback) => {
 
     console.log(requestProperty);
     console.log("This is a about route");
-    callback(200, "This is a about page")
+    callback(200, {})
 }
 
 

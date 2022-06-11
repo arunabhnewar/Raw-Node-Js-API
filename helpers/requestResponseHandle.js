@@ -3,11 +3,56 @@
 const url = require('url');
 const routes = require('../routes/routes');
 const { notFoundHandler } = require('../handlers/notFoundHandler');
+const data = require('./library/data');
 
 
 
 // Module Wrapper
 const handler = {};
+
+
+// const content = {
+//     firstName: "Jamboo",
+//     lastName: "Papa",
+//     phone: "9876543210",
+//     password: "11062022",
+//     age: "3 Years",
+// }
+
+// data.create("check", 'test', JSON.stringify(content), (err) => {
+//     if (!err) {
+//         console.log("File successfuly added");
+//     } else {
+//         console.log(err);
+//     }
+// })
+
+
+// data.read("check", 'test', (err, content) => {
+//     if (!err && content) {
+//         console.log(content);
+//     } else {
+//         console.log(err.message);
+//     }
+// })
+
+
+// data.update("check", 'test', JSON.stringify(content), (err) => {
+//     if (!err) {
+//         console.log("file upadated");
+//     } else {
+//         console.log(err.message);
+//     }
+// })
+
+
+// data.delete("check", 'test', (err) => {
+//     if (!err) {
+//         console.log("File deleted successfuly");
+//     } else {
+//         console.log(err.message);
+//     }
+// })
 
 
 
@@ -46,9 +91,14 @@ handler.requestResponseHandle = (req, res) => {
 
             const choosenHandler = routes[formatPath] ? routes[formatPath] : notFoundHandler;
 
-            choosenHandler(requestProperty, (statusCode, body) => {
-                res.writeHead(statusCode);
-                res.end(body);
+            choosenHandler(requestProperty, (statusCode, payload) => {
+
+                // Validation check
+                statusCode = typeof (statusCode) === "number" ? statusCode : 500;
+                payload = typeof (payload) === "object" ? payload : {};
+
+                res.writeHead(statusCode, { "content-type": "application/json" });
+                res.end(JSON.stringify(payload));
             })
         })
 
